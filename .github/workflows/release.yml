@@ -53,19 +53,27 @@ jobs:
     environment: release
     timeout-minutes: 5
     steps:
+      - name: Download the assets
+        uses: actions/download-artifact@v4
+        with:
+          name: all-dist-${{ github.run_id }}
+
       - name: Publish the assets
         run: echo "published!"
 
       - name: Annotate the dist files
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-            NAME=$(git config user.name)
-            SHA=$(shasum -a 256 LICENSE | awk '{print $1;}')
+          NAME=$(gh api users/$GITHUB_ACTOR --jq '.name')
+          ls dist
+          SHA=$(shasum -a 256 LICENSE | awk '{print $1;}')
 
-            echo "Product: Test Annotated Project"
-            echo "Version: $GITHUB_REF_NAME"
-            echo "Releaser: $NAME"
-            echo "Filename: LICENSE"
-            echo "SHASUM: $SHA"
+          echo "Product: Test Annotated Project"
+          echo "Version: $GITHUB_REF_NAME"
+          echo "Releaser: $NAME"
+          echo "Filename: LICENSE"
+          echo "SHASUM: $SHA"
 
       - name: Create a draft release 
         env:
