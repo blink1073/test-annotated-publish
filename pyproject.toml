@@ -1,6 +1,6 @@
 [project]
 name = "test-annotated-publish"
-version = "0.1.21"
+version = "0.1.22"
 description = "null"
 readme = "README.md"
 requires-python = ">=3.8"
