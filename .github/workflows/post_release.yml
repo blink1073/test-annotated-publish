@@ -18,3 +18,11 @@ jobs:
             sleep 1
             gh release download
           end
+          cat metadata.txt
+
+      - name: Get Job ID from GH API
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          job=$(cat metadata.txt)
+          gh run view --log --job=$job
