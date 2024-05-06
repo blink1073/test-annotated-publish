@@ -70,6 +70,8 @@ jobs:
           echo "job_id=$job_id" > metadata.txt
 
       - name: Create a draft release 
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create ${{ inputs.version }} --draft --verify-tag --title ${{ inputs.version }} --notes ""
           gh release upload ${{ inputs.version }} metadata.txt
