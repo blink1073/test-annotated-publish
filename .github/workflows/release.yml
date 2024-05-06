@@ -44,7 +44,8 @@ jobs:
           git push origin --tags
 
       - name: Build the assets
-        uses: ./.github/actions/build
+        #uses: ./.github/actions/build
+        run: echo "built!"
 
       - name: Publish the assets
         run: echo "published!"
