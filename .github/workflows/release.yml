@@ -36,7 +36,7 @@ jobs:
       - name: Bump the version
         run: |
           current=$(python setup.py --version)
-          sed -i '' "s/version = \"$current\"/version = \"${{inputs.version}}\"/" pyproject.toml
+          sed -i "s/version = \"$current\"/version = \"${{inputs.version}}\"/" pyproject.toml
           git tag -a ${{inputs.version}} -m "bump ${{inputs.version}}"
           git add .
           git commit -a -m "bump ${{inputs.version}}"
