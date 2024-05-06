@@ -53,13 +53,12 @@ jobs:
     environment: release
     timeout-minutes: 5
     steps:
+      - uses: actions/checkout@v4
       - name: Download the assets
         uses: actions/download-artifact@v4
         with:
           name: all-dist-${{ github.run_id }}
-
-      - name: Publish the assets
-        run: echo "published!"
+          path: dist/
 
       - name: Annotate the dist files
         env:
@@ -75,12 +74,15 @@ jobs:
           echo "Filename: LICENSE"
           echo "SHASUM: $SHA"
 
+      - name: Publish the assets
+        run: echo "published!"
+
       - name: Create a draft release 
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
           cat "$GITHUB_RUN_ID" > metadata.txt
-          gh release create ${{ inputs.version }} --draft --verify-tag --title ${{ inputs.version }} --notes ""
+          gh release create ${{ inputs.version }} --verify-tag --title ${{ inputs.version }} --notes ""
           gh release upload ${{ inputs.version }} metadata.txt
 
     
