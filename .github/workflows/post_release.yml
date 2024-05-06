@@ -19,5 +19,6 @@ jobs:
         run: |
           gh release download ${{ github.ref_name }}
           job=$(cat metadata.txt)
-          gh run view --log --job=$job > logs.txt
+          log=$(gh run view --log --job=$job)
+          echo $log > logs.txt
           gh release upload ${{ github.ref_name }} logs.txt
