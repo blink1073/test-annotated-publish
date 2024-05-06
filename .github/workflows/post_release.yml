@@ -11,19 +11,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          set -ex
-          while [ ! -f metadata.txt ]
-          do 
-            sleep 1
-            gh release download ${{ github.ref_name }}
-          done
-          cat metadata.txt
-
-      - name: Get Job ID from GH API
+      - name: Download the metadata and upload the logs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          gh release download ${{ github.ref_name }}
           job=$(cat metadata.txt)
           gh run view --log --job=$job > logs.txt
           gh release upload ${{ github.ref_name }} logs.txt
