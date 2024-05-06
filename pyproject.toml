@@ -26,3 +26,6 @@ CI = "https://github.com/blink1073/test-annotated-publish/actions"
 
 [project.optional-dependencies]
 test = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["test_annotated_publish"]
