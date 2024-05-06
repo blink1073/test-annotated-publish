@@ -65,14 +65,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           NAME=$(gh api users/$GITHUB_ACTOR --jq '.name')
-          ls dist
-          SHA=$(shasum -a 256 LICENSE | awk '{print $1;}')
-
+          cd dist
           echo "Product: Test Annotated Project"
           echo "Version: $GITHUB_REF_NAME"
           echo "Releaser: $NAME"
-          echo "Filename: LICENSE"
-          echo "SHASUM: $SHA"
+          for filename in *; do
+              SHA=$(shasum -a 256 $filename | awk '{print $1;}')
+              echo "Filename: $filename"
+              echo "SHASUM: $SHA"
+          done
 
       - name: Publish the assets
         run: echo "published!"
@@ -81,7 +82,7 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
-          cat "$GITHUB_RUN_ID" > metadata.txt
+          echo "$GITHUB_RUN_ID" > metadata.txt
           gh release create ${{ inputs.version }} --verify-tag --title ${{ inputs.version }} --notes ""
           gh release upload ${{ inputs.version }} metadata.txt
 
