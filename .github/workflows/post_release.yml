@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Download the metadata and upload the logs
         env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -ex
           gh release download ${{ github.ref_name }}
