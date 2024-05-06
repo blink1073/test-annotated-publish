@@ -26,12 +26,9 @@ jobs:
           python-version: '3.11'
 
       - name: Set up Git Config
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
-          NAME=$(gh api users/$GITHUB_ACTOR --jq '.name')
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          git config user.name "$NAME"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
 
       - name: Bump the version
         run: |
@@ -72,13 +69,13 @@ jobs:
         run: |
           NAME=$(gh api users/$GITHUB_ACTOR --jq '.name')
           cd dist
-          echo "Product: Test Annotated Project"
-          echo "Version: $GITHUB_REF_NAME"
-          echo "Releaser: $NAME"
+          echo "Product: Test Annotated Project" > papertrail.txt
+          echo "Version: $GITHUB_REF_NAME" >> papertrail.txt
+          echo "Releaser: $NAME"  >> papertrail.txt
           for filename in *; do
               SHA=$(shasum -a 256 $filename | awk '{print $1;}')
-              echo "Filename: $filename"
-              echo "SHASUM: $SHA"
+              echo "Filename: $filename"  >> papertrail.txt
+              echo "SHASUM: $SHA"  >> papertrail.txt
           done
 
       - name: Publish the assets
@@ -88,8 +85,9 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
-          echo "$GITHUB_RUN_ID" > metadata.txt
+          echo "$GITHUB_RUN_ID" > release_run_id.txt
           gh release create ${{ inputs.version }} --verify-tag --title ${{ inputs.version }} --notes ""
-          gh release upload ${{ inputs.version }} metadata.txt
+          gh release upload ${{ inputs.version }} release_run_id.txt 
+          gh release upload ${{ inputs.version }} papertrail.txt
 
     
