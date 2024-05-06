@@ -19,6 +19,8 @@ jobs:
         run: |
           gh release download ${{ github.ref_name }}
           job=$(cat metadata.txt)
-          log=$(gh run view --log --job $job)
-          echo $log > logs.txt
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/$GITHUB_REPOSITORY/actions/jobs/$job/logs > logs.txt
           gh release upload ${{ github.ref_name }} logs.txt
