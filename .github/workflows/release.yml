@@ -51,7 +51,7 @@ jobs:
 
       - name: Annotate
         run: |
-            NAME=$(git for-each-ref ${{inputs.version}} --shell --format='%(taggername)')
+            NAME=$(git config user.name)
             SHA=$(shasum -a 256 LICENSE | awk '{print $1;}')
 
             echo "Product: Test Annotated Project"
@@ -73,7 +73,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create ${{ inputs.version }} --draft --title ${{ inputs.version }} --notes ""
+          gh release create ${{ inputs.version }} --draft --title ${{ inputs.version }} --notes "" --target ${{ inputs.version }}
           gh release upload ${{ inputs.version }} metadata.txt
 
     
