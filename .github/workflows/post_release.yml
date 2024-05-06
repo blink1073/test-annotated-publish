@@ -14,12 +14,6 @@ jobs:
     environment: release
     steps:
       - uses: actions/checkout@v4
-      - name: Generate a token
-        id: generate-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Download the metadata and upload the logs
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
@@ -27,8 +21,5 @@ jobs:
           set -ex
           gh release download ${{ github.ref_name }}
           job=$(cat metadata.txt)
-          gh api \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/$GITHUB_REPOSITORY/actions/jobs/$job/logs > logs.txt
+          gh run view --log --job=$job > logs.txt
           gh release upload ${{ github.ref_name }} logs.txt
