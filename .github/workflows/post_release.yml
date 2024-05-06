@@ -1,12 +1,11 @@
-name: Fetch Logs
+name: Upload Logs
 
 on:
   release:
     types: [published]
 
 permissions:
-  contents: read
-  actions: read
+  contents: write
 
 jobs:
   test:
