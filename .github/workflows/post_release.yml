@@ -23,6 +23,7 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
+          set -ex
           gh release download ${{ github.ref_name }}
           job=$(cat metadata.txt)
           gh api \
