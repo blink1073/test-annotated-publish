@@ -73,7 +73,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create ${{ inputs.version }} --draft --verify-tag --title ${{ inputs.version }} --notes ""
+          gh release create ${{ inputs.version }} --draft --title ${{ inputs.version }} --notes ""
           gh release upload ${{ inputs.version }} metadata.txt
 
     
