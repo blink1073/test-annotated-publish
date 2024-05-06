@@ -69,13 +69,16 @@ jobs:
         run: |
           NAME=$(gh api users/$GITHUB_ACTOR --jq '.name')
           cd dist
-          echo "Product: Test Annotated Project" > papertrail.txt
-          echo "Version: $GITHUB_REF_NAME" >> papertrail.txt
-          echo "Releaser: $NAME"  >> papertrail.txt
+          export PAPERTRAIL="../papertrail.txt"
+          echo "Product: Test Annotated Project" > $PAPERTRAIL
+          echo "Version: $GITHUB_REF_NAME" >> $PAPERTRAIL
+          echo "Releaser: $NAME"  >> $PAPERTRAIL
+          echo "Build Source: GitHub Actions"
+          echo "Build Number: $GITHUB_RUN_ID"
           for filename in *; do
               SHA=$(shasum -a 256 $filename | awk '{print $1;}')
-              echo "Filename: $filename"  >> papertrail.txt
-              echo "SHASUM: $SHA"  >> papertrail.txt
+              echo "Filename: $filename"  >> $PAPERTRAIL
+              echo "SHASUM: $SHA"  >> $PAPERTRAIL
           done
 
       - name: Publish the assets
